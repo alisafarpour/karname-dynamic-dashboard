@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-
+const withFonts = require('next-fonts');
+const withPlugins = require('next-compose-plugins');
 
 const httpsHostnames = ['jsonplaceholder.typicode.com']
 const httpHostnames = ['api.localhost', '127.0.0.1',]
@@ -19,4 +20,4 @@ const nextConfig = {
     },
 };
 
-export default nextConfig;
+module.exports = withPlugins([withFonts], nextConfig,);
