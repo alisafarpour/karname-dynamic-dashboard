@@ -10,6 +10,7 @@ import searchInObject from "utils/searchInObject";
 import Highlighted from "components/common/Highlighted";
 import SortIcon from '@mui/icons-material/Sort';
 import InfoDialog from "components/Dialogs/InfoDialog";
+import {handleRequestWithDelay} from "utils/handleRequestWithDelay";
 
 export type TColumns = {
     field: string
@@ -40,19 +41,22 @@ const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5
     };
 
     const searchOnChange = (event: ChangeEvent<unknown>) => {
-        setSearchField(event?.target?.['value'])
+        handleRequestWithDelay(() => {
+            setSearchField(event?.target?.['value'])
+        })
     };
 
     const handleCloseDialog = () => {
         setOpenDialog(false)
     }
 
-    const onRowClick = (item : Record<any, any>) => {
+    const onRowClick = (item: Record<any, any>) => {
         setSelectedValue(item)
         setOpenDialog(true)
     }
 
     const resultData = useMemo(() => {
+        setPage(1)
         if (searchField !== null && searchField.length !== 0)
             if (!!sortField)
                 return data?.filter(item => searchInObject(item, searchField, ['name', 'email']))?.sort((a: Record<any, any>, b: Record<any, any>) => a?.[sortField]?.localeCompare(b?.[sortField]))
@@ -159,7 +163,7 @@ const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5
                                                 borderColor: 'border',
                                                 borderLeft: index === 0 ? 0 : 1,
                                                 minWidth: column.minWidth,
-                                                height:1,
+                                                height: 1,
                                                 p: 1,
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
@@ -197,8 +201,10 @@ const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5
 
             {(!!data && resultData?.length !== 0) &&
                 <Grid container justifyContent={'center'} alignItems={'center'} sx={{height: 50}}>
-                    <Pagination count={Number(resultData?.length) / totalDataInOnePage} page={page}
-                                onChange={handleChange}/>
+                    <Pagination
+                        count={Math.round((Number(resultData?.length) / totalDataInOnePage)) === 0 ? 1 : Math.round((Number(resultData?.length) / totalDataInOnePage))}
+                        page={page}
+                        onChange={handleChange}/>
                 </Grid>
             }
 
