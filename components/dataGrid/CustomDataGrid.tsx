@@ -82,7 +82,7 @@ const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5
                     />
                 </Grid>
             </Grid>
-            <Grid container sx={{overflow: 'auto'}}>
+            <Grid container justifyContent={'center'} sx={{overflow: 'auto'}}>
                 <Grid container justifyContent={'center'} wrap="nowrap">
                     {columns.map((item: TColumns, index: number) => {
                         return (
@@ -100,7 +100,6 @@ const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5
                                 justifyContent={"center"}
                                 alignItems={"center"}
                                 sx={{
-                                    width: item.minWidth,
                                     minWidth: item.minWidth,
                                     bgcolor: 'main',
                                     borderLeft: index === 0 ? 0 : 1,
