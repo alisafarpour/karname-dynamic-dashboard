@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import searchInObject from "utils/searchInObject";
 import Highlighted from "components/common/Highlighted";
 import SortIcon from '@mui/icons-material/Sort';
+import InfoDialog from "components/Dialogs/InfoDialog";
 
 export type TColumns = {
     field: string
@@ -22,17 +23,18 @@ export type TColumns = {
 interface ICustomDataGrid {
     title?: string
     columns: TColumns[]
-    data?: Record<any, any>[] | undefined
+    data?: any,
     isLoading?: boolean
-    onRowClick?: (params: any) => void
     totalDataInOnePage?: number,
 }
 
-const CustomDataGrid = ({title, columns, data, isLoading, onRowClick, totalDataInOnePage = 5}: ICustomDataGrid) => {
+const CustomDataGrid = ({title, columns, data, isLoading, totalDataInOnePage = 5}: ICustomDataGrid) => {
 
     const [page, setPage] = useState<number>(1);
     const [searchField, setSearchField] = useState<string | null>(null);
     const [sortField, setSortField] = useState<string | null>(null);
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [selectedValue, setSelectedValue] = useState<Record<any, any> | null>(null)
     const handleChange = (event: ChangeEvent<unknown>, value: number) => {
         setPage(value)
     };
@@ -40,6 +42,15 @@ const CustomDataGrid = ({title, columns, data, isLoading, onRowClick, totalDataI
     const searchOnChange = (event: ChangeEvent<unknown>) => {
         setSearchField(event?.target?.['value'])
     };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false)
+    }
+
+    const onRowClick = (item : Record<any, any>) => {
+        setSelectedValue(item)
+        setOpenDialog(true)
+    }
 
     const resultData = useMemo(() => {
         if (searchField !== null && searchField.length !== 0)
@@ -127,7 +138,7 @@ const CustomDataGrid = ({title, columns, data, isLoading, onRowClick, totalDataI
                                     key={`data${index}`}
                                     container
                                     wrap="nowrap"
-                                    onClick={onRowClick}
+                                    onClick={() => onRowClick(singleData)}
                                     justifyContent={"center"}
                                     alignItems={"center"}
                                     sx={{
@@ -149,7 +160,13 @@ const CustomDataGrid = ({title, columns, data, isLoading, onRowClick, totalDataI
                                                 borderColor: 'border',
                                                 borderLeft: index === 0 ? 0 : 1,
                                                 minWidth: column.minWidth,
+                                                height:1,
                                                 p: 1,
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: '1',
+                                                WebkitBoxOrient: 'vertical',
                                             }}>
                                                 <Typography
                                                     variant={'dashboardBody'}
@@ -186,6 +203,9 @@ const CustomDataGrid = ({title, columns, data, isLoading, onRowClick, totalDataI
                 </Grid>
             }
 
+            {!!openDialog &&
+                <InfoDialog open={openDialog} data={selectedValue} handleClose={handleCloseDialog}/>
+            }
 
         </Grid>
     )
