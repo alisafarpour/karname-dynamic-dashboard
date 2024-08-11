@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "baseUrl": "./",
     "strict": false,
     "strictNullChecks": false,
@@ -20,12 +24,28 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "utils/*": ["utils/*"],
-      "components/*": ["components/*"],
-      "hooks/*": ["hooks/*"],
-    }
+      "@/*": [
+        "./*"
+      ],
+      "utils/*": [
+        "utils/*"
+      ],
+      "components/*": [
+        "components/*"
+      ],
+      "hooks/*": [
+        "hooks/*"
+      ]
+    },
+    "moduleResolution": "node"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
